@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>青岚校报 · 文章工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-mark" aria-hidden="true">QL</div>
+      <div>
+        <p class="publication">青岚校报</p>
+        <h1>文章工作台</h1>
+      </div>
+    </div>
+    <div class="edition-block">
+      <span class="edition-label">当前版次</span>
+      <strong>第 128 期</strong>
+      <span class="deadline">周四截稿</span>
+    </div>
+    <div class="profile" aria-label="当前用户">
+      <span class="avatar">编</span>
+      <span>责任编辑</span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="section-nav" aria-label="文章栏目">
+      <div class="nav-heading">
+        <span>栏目</span>
+        <button class="icon-button" id="new-article" type="button" title="新建稿件" aria-label="新建稿件">+</button>
+      </div>
+      <nav id="section-list">
+        <button class="section-item active" type="button" data-section="news">
+          <span class="section-icon">闻</span>
+          <span>新闻</span>
+          <span class="section-count" data-count="news">0</span>
+        </button>
+        <button class="section-item" type="button" data-section="interview">
+          <span class="section-icon">访</span>
+          <span>访谈</span>
+          <span class="section-count" data-count="interview">0</span>
+        </button>
+        <button class="section-item" type="button" data-section="editorial">
+          <span class="section-icon">论</span>
+          <span>社论</span>
+          <span class="section-count" data-count="editorial">0</span>
+        </button>
+        <button class="section-item" type="button" data-section="event">
+          <span class="section-icon">活</span>
+          <span>活动</span>
+          <span class="section-count" data-count="event">0</span>
+        </button>
+      </nav>
+      <div class="queue-group">
+        <p class="queue-title">编务队列</p>
+        <button class="queue-item" type="button" data-queue="completed">
+          <span class="queue-dot completed-dot"></span>
+          <span>完成清单</span>
+          <span class="section-count" id="completed-count">0</span>
+        </button>
+      </div>
+      <div class="issue-progress">
+        <div class="progress-row"><span>本期进度</span><strong id="issue-progress-label">0 / 0</strong></div>
+        <div class="progress-track"><span id="issue-progress-bar"></span></div>
+      </div>
+    </aside>
+
+    <section class="article-browser" aria-label="稿件列表">
+      <div class="browser-heading">
+        <div>
+          <p class="eyebrow" id="active-section-label">新闻</p>
+          <h2>稿件列表</h2>
+        </div>
+        <span class="result-count" id="result-count">0 篇</span>
+      </div>
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input id="search-input" type="search" placeholder="搜索标题或作者" autocomplete="off">
+      </label>
+      <div class="status-tabs" id="status-tabs" aria-label="状态筛选">
+        <button class="active" type="button" data-status="">全部</button>
+        <button type="button" data-status="draft">草稿</button>
+        <button type="button" data-status="pending_review">待审核</button>
+        <button type="button" data-status="published">已发布</button>
+        <button type="button" data-status="returned">退回</button>
+      </div>
+      <div class="article-list" id="article-list" aria-live="polite"></div>
+    </section>
+
+    <section class="editor-pane" aria-label="文章编辑器">
+      <div class="editor-empty" id="editor-empty">
+        <span class="empty-mark">稿</span>
+        <h2>选择一篇稿件</h2>
+        <p>稿件内容将在这里打开。</p>
+      </div>
+      <div class="editor-content hidden" id="editor-content">
+        <div class="editor-toolbar">
+          <div class="segmented" role="tablist" aria-label="编辑视图">
+            <button class="active" type="button" data-view="edit">编辑</button>
+            <button type="button" data-view="preview">预览</button>
+          </div>
+          <div class="toolbar-actions">
+            <span class="save-state" id="save-state">内容已同步</span>
+            <button class="secondary-button" id="save-button" type="button">保存</button>
+            <button class="primary-button" id="transition-button" type="button">提交审核</button>
+          </div>
+        </div>
+
+        <div class="article-meta-bar">
+          <span class="status-badge" id="editor-status"></span>
+          <span id="editor-section"></span>
+          <span id="editor-edition"></span>
+          <span id="editor-author"></span>
+        </div>
+
+        <form class="editor-form" id="editor-form">
+          <label>
+            <span>标题</span>
+            <textarea id="title-input" rows="2" maxlength="80" required></textarea>
+          </label>
+          <label>
+            <span>导语</span>
+            <textarea id="summary-input" rows="3" maxlength="160"></textarea>
+          </label>
+          <label class="body-field">
+            <span>正文</span>
+            <textarea id="body-input" required></textarea>
+          </label>
+          <div class="word-count" id="word-count">0 字</div>
+        </form>
+
+        <article class="preview hidden" id="preview-pane">
+          <header>
+            <p id="preview-kicker"></p>
+            <h2 id="preview-title"></h2>
+            <p class="preview-summary" id="preview-summary"></p>
+            <div class="preview-byline" id="preview-byline"></div>
+          </header>
+          <div class="preview-body" id="preview-body"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
