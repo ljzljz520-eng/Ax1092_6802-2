@@ -35,10 +35,27 @@ func (s *Service) Transition(id string, target Status) (Article, error) {
 	if !target.Valid() {
 		return Article{}, ErrInvalidStatus
 	}
-	if _, err := s.store.Get(id); err != nil {
+	article, err := s.store.Get(id)
+	if err != nil {
 		return Article{}, err
 	}
+	if !transitionAllowed(article.Status, target) {
+		return Article{}, ErrInvalidTransition
+	}
 	return s.store.SetStatus(id, target)
+}
+
+func transitionAllowed(current, target Status) bool {
+	switch current {
+	case StatusDraft, StatusReturned:
+		return target == StatusPendingReview
+	case StatusPendingReview:
+		return target == StatusPublished || target == StatusReturned
+	case StatusPublished:
+		return target == StatusArchived
+	default:
+		return false
+	}
 }
 
 func (s *Service) Completed() []Article {
